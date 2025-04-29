@@ -67,7 +67,7 @@ button {
 }
 
 button:hover {
-  background: #005bb5;
+  background: #09b500;
 }
 
 .options {
@@ -92,4 +92,23 @@ button:hover {
   width: 16px;
   height: 16px;
   cursor: pointer;
+}
+
+.submitted {
+  margin-top: 24px;
+  background: #fafafa;
+  padding: 16px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.submitted h3 {
+  margin-top: 0;
+}
+
+.submitted pre {
+  white-space: pre-wrap;
+  word-break: break-all;
+  font-family: monospace;
+  font-size: 0.9em;
 }

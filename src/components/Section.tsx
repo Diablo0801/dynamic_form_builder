@@ -1,4 +1,3 @@
-// src/components/Section.tsx
 import React from "react";
 import type { FormSection, FormField } from "../types/formTypes";
 
@@ -25,12 +24,11 @@ const Section: React.FC<Props> = ({
   onPrev,
   onSubmit,
 }) => {
-  // 1) Validate this section
   const validate = (): boolean => {
     const newErr: Record<string, string> = {};
     section.fields.forEach((f) => {
       const val = formData[f.fieldId];
-      if (f.required && (val === undefined || val === "" || val.length === 0)) {
+      if (f.required && (val === undefined || val === "")) {
         newErr[f.fieldId] = "This field is required";
       } else if (
         f.minLength &&
@@ -52,12 +50,10 @@ const Section: React.FC<Props> = ({
     return Object.keys(newErr).length === 0;
   };
 
-  // 2) Handle any change
   const handleChange = (fieldId: string, value: any) => {
     setFormData((prev) => ({ ...prev, [fieldId]: value }));
   };
 
-  // 3) Render each field type
   const renderField = (f: FormField) => {
     const commonProps = {
       id: f.fieldId,
@@ -193,7 +189,7 @@ const Section: React.FC<Props> = ({
       {section.fields.map(renderField)}
 
       <div className="buttons">
-        <button type="button" onClick={onPrev} disabled={false}>
+        <button type="button" onClick={onPrev}>
           Prev
         </button>
 

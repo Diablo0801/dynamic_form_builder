@@ -20,11 +20,10 @@ const Login: React.FC<Props> = ({ onLoginSuccess }) => {
     }
 
     try {
-      // 1) Try to register user
       await createUser(rn, name.trim());
     } catch (err: any) {
       console.warn("create-user error:", err.message);
-      // If user already exists, ignore and proceed:
+
       if (!err.message.includes("409")) {
         setError(err.message || "Registration failed");
         return;
@@ -32,7 +31,6 @@ const Login: React.FC<Props> = ({ onLoginSuccess }) => {
     }
 
     try {
-      // 2) Fetch the form regardless
       const { form } = await getForm(rn);
       onLoginSuccess(form.sections);
     } catch (err: any) {
