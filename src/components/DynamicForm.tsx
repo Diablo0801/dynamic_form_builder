@@ -1,4 +1,3 @@
-// src/components/DynamicForm.tsx
 import React, { useState } from "react";
 import type { FormSection } from "../types/formTypes";
 import Section from "./Section";

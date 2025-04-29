@@ -1,4 +1,3 @@
-// src/App.tsx
 import React, { useState } from "react";
 import Login from "./components/Login";
 import DynamicForm from "./components/DynamicForm";

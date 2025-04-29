@@ -1,4 +1,3 @@
-// src/components/Login.tsx
 import React, { useState } from "react";
 import { createUser, getForm } from "../services/api";
 import type { FormSection } from "../types/formTypes";
