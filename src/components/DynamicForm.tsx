@@ -1,12 +1,13 @@
+// src/components/DynamicForm.tsx
 import React, { useState } from "react";
-import type { FormSection } from "../types/formTypes";
 import Section from "./Section";
+import type { FormSection } from "../types/formTypes";
 
 interface Props {
   sections: FormSection[];
 }
 
-const DynamicForm: React.FC<Props> = ({ sections }) => {
+export default function DynamicForm({ sections }: Props) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [formData, setFormData] = useState<Record<string, any>>({});
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -22,7 +23,7 @@ const DynamicForm: React.FC<Props> = ({ sections }) => {
   const handleSubmit = (valid: boolean) => {
     if (valid) {
       console.log("Final Form Data:", formData);
-      alert("Check console for final form data");
+      alert("Form submitted! Check console.");
     }
   };
 
@@ -35,12 +36,11 @@ const DynamicForm: React.FC<Props> = ({ sections }) => {
         setFormData={setFormData}
         errors={errors}
         setErrors={setErrors}
+        isLast={isLast}
         onNext={handleNext}
         onPrev={handlePrev}
         onSubmit={handleSubmit}
       />
     </div>
   );
-};
-
-export default DynamicForm;
+}
