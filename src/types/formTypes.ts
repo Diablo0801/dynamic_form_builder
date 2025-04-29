@@ -1,3 +1,20 @@
+export interface FormResponse {
+  message: string;
+  form: {
+    formTitle: string;
+    formId: string;
+    version: string;
+    sections: FormSection[];
+  };
+}
+
+export interface FormSection {
+  sectionId: number;
+  title: string;
+  description: string;
+  fields: FormField[];
+}
+
 export interface FormField {
   fieldId: string;
   type:
@@ -23,21 +40,4 @@ export interface FormField {
   }>;
   maxLength?: number;
   minLength?: number;
-}
-
-export interface FormSection {
-  sectionId: number;
-  title: string;
-  description: string;
-  fields: FormField[];
-}
-
-export interface FormResponse {
-  message: string;
-  form: {
-    formTitle: string;
-    formId: string;
-    version: string;
-    sections: FormSection[];
-  };
 }

@@ -1,13 +1,31 @@
-import axios from "axios";
+import type { FormResponse } from "../types/formTypes";
 
-const BASE_URL = "https://dynamic-form-generator-9rl7.onrender.com";
+export async function createUser(
+  rollNumber: number,
+  name: string
+): Promise<{ message: string }> {
+  const res = await fetch(
+    "https://dynamic-form-generator-9rl7.onrender.com/create-user",
+    {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ rollNumber, name }),
+    }
+  );
+  if (!res.ok) {
+    const text = await res.text();
+    throw new Error(`create-user failed: ${res.status} — ${text}`);
+  }
+  return res.json();
+}
 
-export const createUser = async (rollNumber: string, name: string) => {
-  const res = await axios.post(`${BASE_URL}/create-user`, { rollNumber, name });
-  return res.data;
-};
-
-export const getForm = async (rollNumber: string) => {
-  const res = await axios.get(`${BASE_URL}/get-form?rollNumber=${rollNumber}`);
-  return res.data;
-};
+export async function getForm(rollNumber: number): Promise<FormResponse> {
+  const res = await fetch(
+    `https://dynamic-form-generator-9rl7.onrender.com/get-form?rollNumber=${rollNumber}`
+  );
+  if (!res.ok) {
+    const text = await res.text();
+    throw new Error(`get-form failed: ${res.status} — ${text}`);
+  }
+  return res.json();
+}

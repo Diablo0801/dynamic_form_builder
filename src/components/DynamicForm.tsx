@@ -1,5 +1,6 @@
+// src/components/DynamicForm.tsx
 import React, { useState } from "react";
-import { FormSection } from "../types/formTypes";
+import type { FormSection } from "../types/formTypes";
 import Section from "./Section";
 
 interface Props {
@@ -7,42 +8,37 @@ interface Props {
 }
 
 const DynamicForm: React.FC<Props> = ({ sections }) => {
-  const [currentSectionIndex, setCurrentSectionIndex] = useState(0);
-  const [formData, setFormData] = useState<{ [key: string]: any }>({});
-  const [errors, setErrors] = useState<{ [key: string]: string }>({});
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [formData, setFormData] = useState<Record<string, any>>({});
+  const [errors, setErrors] = useState<Record<string, string>>({});
 
-  const currentSection = sections[currentSectionIndex];
+  const isLast = currentIndex === sections.length - 1;
 
   const handleNext = (valid: boolean) => {
-    if (valid && currentSectionIndex < sections.length - 1) {
-      setCurrentSectionIndex((i) => i + 1);
-    }
+    if (valid && !isLast) setCurrentIndex((i) => i + 1);
   };
-
   const handlePrev = () => {
-    if (currentSectionIndex > 0) {
-      setCurrentSectionIndex((i) => i - 1);
-    }
+    if (currentIndex > 0) setCurrentIndex((i) => i - 1);
   };
-
   const handleSubmit = (valid: boolean) => {
     if (valid) {
       console.log("Final Form Data:", formData);
+      alert("Check console for final form data");
     }
   };
 
   return (
-    <div>
-      <h2>{currentSection.title}</h2>
-      <p>{currentSection.description}</p>
+    <div className="container">
+      <h2>{sections[currentIndex].title}</h2>
       <Section
-        section={currentSection}
+        section={sections[currentIndex]}
         formData={formData}
         setFormData={setFormData}
+        errors={errors}
+        setErrors={setErrors}
         onNext={handleNext}
         onPrev={handlePrev}
         onSubmit={handleSubmit}
-        isLast={currentSectionIndex === sections.length - 1}
       />
     </div>
   );

@@ -1,41 +1,66 @@
+// src/components/Login.tsx
 import React, { useState } from "react";
 import { createUser, getForm } from "../services/api";
-import { FormResponse } from "../types/formTypes";
+import type { FormSection } from "../types/formTypes";
 
 interface Props {
-  onLogin: (rollNumber: string, name: string) => void;
+  onLoginSuccess: (sections: FormSection[]) => void;
 }
 
-const Login: React.FC<Props> = ({ onLogin }) => {
+const Login: React.FC<Props> = ({ onLoginSuccess }) => {
   const [rollNumber, setRollNumber] = useState("");
   const [name, setName] = useState("");
   const [error, setError] = useState("");
 
-  const handleSubmit = async () => {
+  const handleLogin = async () => {
+    setError("");
+    const rn = Number(rollNumber);
+    if (isNaN(rn)) {
+      setError("Roll Number must be a number");
+      return;
+    }
+
     try {
-      await createUser(rollNumber, name);
-      const response = await getForm(rollNumber);
-      onLogin(response.form, rollNumber);
-    } catch (err) {
-      setError("Failed to login or fetch form");
+      // 1) Try to register user
+      await createUser(rn, name.trim());
+    } catch (err: any) {
+      console.warn("create-user error:", err.message);
+      // If user already exists, ignore and proceed:
+      if (!err.message.includes("409")) {
+        setError(err.message || "Registration failed");
+        return;
+      }
+    }
+
+    try {
+      // 2) Fetch the form regardless
+      const { form } = await getForm(rn);
+      onLoginSuccess(form.sections);
+    } catch (err: any) {
+      console.error("get-form error:", err);
+      setError(err.message || "Failed to fetch form");
     }
   };
 
   return (
-    <div>
-      <h2>Login</h2>
-      <input
-        placeholder="Roll Number"
-        value={rollNumber}
-        onChange={(e) => setRollNumber(e.target.value)}
-      />
-      <input
-        placeholder="Name"
-        value={name}
-        onChange={(e) => setName(e.target.value)}
-      />
-      <button onClick={handleSubmit}>Login</button>
-      {error && <p style={{ color: "red" }}>{error}</p>}
+    <div className="container">
+      <h2>Student Form App — Login</h2>
+      <div className="field">
+        <input
+          placeholder="Roll Number"
+          value={rollNumber}
+          onChange={(e) => setRollNumber(e.target.value)}
+        />
+      </div>
+      <div className="field">
+        <input
+          placeholder="Name"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+        />
+      </div>
+      <button onClick={handleLogin}>Login</button>
+      {error && <p className="error">{error}</p>}
     </div>
   );
 };
